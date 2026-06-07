@@ -1,8 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        label 'linux'
+    }
 
     stages {
-
         stage('Build') {
             steps {
                 sh 'node index.js'
