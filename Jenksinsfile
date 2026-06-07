@@ -1,13 +1,10 @@
 pipeline {
-    agent any
+
+    agent {
+        label 'linux'
+    }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                echo 'Obtendo código'
-            }
-        }
 
         stage('Build') {
             steps {
@@ -17,7 +14,7 @@ pipeline {
 
         stage('Testes') {
             steps {
-                echo 'Testes executados'
+                echo 'Executando testes'
             }
         }
     }
