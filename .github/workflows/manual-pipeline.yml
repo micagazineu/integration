@@ -1,0 +1,63 @@
+name: 'Execução Manual - Pipeline Completa'
+
+on:
+  workflow_dispatch: # Disparo estritamente manual via botão na interface do GitHub
+
+jobs:
+  pipeline-manual:
+    runs-on: self-hosted # Usa o seu runner local que configuramos e ativamos em segundo plano!
+    
+    steps:
+      - name: 1. Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+
+      - name: 3. Instalando Yarn
+        run: npm install -g yarn
+
+      - name: 4. Instalando Dependências
+        run: |
+          cd pgats-integra-o
+          yarn install --frozen-lockfile
+
+      - name: 5. Executando Linter e Inspeção
+        run: |
+          cd pgats-integra-o
+          yarn run lint
+
+      - name: 6. Executando Testes Unitários
+        run: |
+          cd pgats-integra-o
+          yarn run test
+
+      - name: 7. Instalando Navegadores do Playwright
+        run: |
+          cd pgats-integra-o
+          yarn playwright install
+
+      - name: 8. Executando Testes E2E (Playwright)
+        run: |
+          cd pgats-integra-o
+          yarn run e2e
+
+      - name: 9. Publicando Relatório de Testes E2E (JUnit)
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Playwright Tests Report Manual
+          path: pgats-integra-o/results.xml
+          reporter: java-junit
+
+      - name: 10. Salvando Relatório HTML do Playwright
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          path: pgats-integra-o/playwright-report/
+          name: Relatório E2E Manual
+
+      - name: 11. Simulação de Deploy
+        run: echo "Deploy efetuado no ambiente manual com sucesso!"
