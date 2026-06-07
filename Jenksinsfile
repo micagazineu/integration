@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Obtendo código'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'node index.js'
+            }
+        }
+
+        stage('Testes') {
+            steps {
+                echo 'Testes executados'
+            }
+        }
+    }
+}
