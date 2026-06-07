@@ -1,0 +1,21 @@
+name: 'Executar Jenkinsfile no GitHub Actions'
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Permite rodar de forma manual clicando em "Run workflow"
+
+jobs:
+  run-jenkinsfile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: 2. Rodar Jenkinsfile via Jenkinsfile Runner (Headless Jenkins)
+        uses: jenkinsci/jfr-static-image-action@master
+        with:
+          command: run
+          jenkinsfile: Jenkinsfile
