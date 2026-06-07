@@ -1,0 +1,59 @@
+stages:
+  - install
+  - lint
+  - test
+  - e2e
+  - deploy
+
+default:
+  image: mcr.microsoft.com/playwright:v1.47.2-jammy
+  cache:
+    key:
+      files:
+        - pgats-integra-o/yarn.lock
+    paths:
+      - pgats-integra-o/node_modules/
+      - ~/.cache/yarn
+
+install_dependencies:
+  stage: install
+  script:
+    - cd pgats-integra-o
+    - npm install -g yarn
+    - yarn install --frozen-lockfile
+
+run_lint:
+  stage: lint
+  script:
+    - cd pgats-integra-o
+    - yarn run lint
+
+run_unit_tests:
+  stage: test
+  script:
+    - cd pgats-integra-o
+    - yarn run test
+  artifacts:
+    name: "relatorio-cobertura"
+    paths:
+      - pgats-integra-o/reports/coverage/
+    expire_in: 1 week
+
+run_e2e_tests:
+  stage: e2e
+  script:
+    - cd pgats-integra-o
+    - yarn run e2e
+  artifacts:
+    name: "relatorio-playwright"
+    when: always
+    paths:
+      - pgats-integra-o/playwright-report/
+    reports:
+      junit: pgats-integra-o/results.xml
+    expire_in: 1 week
+
+simulated_deploy:
+  stage: deploy
+  script:
+    - echo "Simulando deploy no ambiente de staging..."

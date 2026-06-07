@@ -86,6 +86,14 @@ jobs:
       - name: Executando testes E2E
         run: yarn run e2e
 
+      - name: Publicando Relatório de Testes E2E (JUnit)
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Playwright Tests Report
+          path: pgats-integra-o/results.xml
+          reporter: java-junit
+
       - name: Salvando relatórios de testes
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
