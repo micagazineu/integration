@@ -8,7 +8,7 @@ pipeline {
             steps {
                 dir('pgats-integra-o') {
                     sh 'npm install -g yarn'
-                    sh 'yarn install'
+                    sh 'yarn install --frozen-lockfile'
                 }
             }
         }
@@ -37,11 +37,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Simular Deploy') {
+            steps {
+                echo 'Simulando deploy no ambiente de staging...'
+            }
+        }
     }
 
     post {
         always {
+            // Salva os relatórios de cobertura (Unit) e do Playwright (E2E) como artefatos no Jenkins
+            archiveArtifacts artifacts: 'pgats-integra-o/reports/coverage/**', allowEmptyArchive: true
             archiveArtifacts artifacts: 'pgats-integra-o/playwright-report/**', allowEmptyArchive: true
+            
+            // Publica os relatórios de testes formatados no Jenkins (JUnit)
+            junit allowEmptyResults: true, testResults: 'pgats-integra-o/results.xml'
         }
     }
 }
