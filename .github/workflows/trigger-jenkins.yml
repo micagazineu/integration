@@ -8,13 +8,15 @@ on:
 
 jobs:
   trigger-jenkins:
-    runs-on: ubuntu-latest
+    # IMPORTANTE: Como seu Jenkins está rodando no localhost:8080 (sua máquina física),
+    # usamos o runner local (self-hosted) para conseguir acessar o localhost com sucesso!
+    runs-on: self-hosted
 
     steps:
       - name: Disparar Job no Jenkins
         uses: appleboy/jenkins-action@master
         with:
-          url: "http://SEU-IP-DO-JENKINS:8080" # Substitua pelo endereço IP ou DNS público do seu servidor Jenkins
-          job: "Nome-Do-Seu-Job-No-Jenkins" # Nome exato da pipeline criada dentro do seu painel do Jenkins
+          url: "http://localhost:8080" # Endereço do seu servidor Jenkins local
+          job: "exercicio1-ci" # Nome exato do seu Job/Pipeline no Jenkins
           username: ${{ secrets.JENKINS_USER }} # Configurado em Settings -> Secrets and variables -> Actions
           token: ${{ secrets.JENKINS_TOKEN }} # Token de API gerado no perfil do usuário no Jenkins
