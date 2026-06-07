@@ -1,0 +1,20 @@
+name: 'Disparar Pipeline do Jenkins'
+
+on:
+  push:
+    branches:
+      - main # Dispara a chamada ao Jenkins a cada push na branch main
+  workflow_dispatch: # Permite também o disparo manual caso queira testar pela interface do GitHub
+
+jobs:
+  trigger-jenkins:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Disparar Job no Jenkins
+        uses: appleboy/jenkins-action@master
+        with:
+          url: "http://SEU-IP-DO-JENKINS:8080" # Substitua pelo endereço IP ou DNS público do seu servidor Jenkins
+          job: "Nome-Do-Seu-Job-No-Jenkins" # Nome exato da pipeline criada dentro do seu painel do Jenkins
+          username: ${{ secrets.JENKINS_USER }} # Configurado em Settings -> Secrets and variables -> Actions
+          token: ${{ secrets.JENKINS_TOKEN }} # Token de API gerado no perfil do usuário no Jenkins
