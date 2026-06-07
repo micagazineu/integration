@@ -8,14 +8,19 @@ on:
 
 jobs:
   run-jenkinsfile:
-    runs-on: ubuntu-latest
+    # IMPORTANTE: Como seu runner local já possui o Docker instalado e configurado,
+    # rodamos como self-hosted para maior velocidade e compatibilidade de rede
+    runs-on: self-hosted
 
     steps:
       - name: 1. Checkout do Código
         uses: actions/checkout@v4
 
-      - name: 2. Rodar Jenkinsfile via Jenkinsfile Runner (Headless Jenkins)
-        uses: jenkinsci/jfr-static-image-action@master
-        with:
-          command: run
-          jenkinsfile: Jenkinsfile
+      - name: 2. Rodar Jenkinsfile via Imagem Pré-Compilada (Sem Build)
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/github/workspace \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            ghcr.io/jenkinsci/jenkinsfile-runner:master \
+            -w /github/workspace \
+            -f /github/workspace/Jenkinsfile
