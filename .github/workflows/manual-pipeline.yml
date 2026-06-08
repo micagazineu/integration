@@ -5,7 +5,7 @@ on:
 
 jobs:
   pipeline-manual:
-    runs-on: self-hosted # Usa o seu runner local que configuramos e ativamos em segundo plano!
+    runs-on: ubuntu-latest # Rodará diretamente nas máquinas em nuvem do GitHub!
     
     steps:
       - name: 1. Checkout do Código
