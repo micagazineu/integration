@@ -19,8 +19,5 @@ jobs:
       - name: 2. Rodar Jenkinsfile via Imagem Pré-Compilada (Sem Build)
         run: |
           docker run --rm \
-            -v ${{ github.workspace }}:/github/workspace \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            ghcr.io/jenkinsci/jenkinsfile-runner:master \
-            -w /github/workspace \
-            -f /github/workspace/Jenkinsfile
+            -v ${{ github.workspace }}:/workspace \
+            ghcr.io/jenkinsci/jenkinsfile-runner:master
