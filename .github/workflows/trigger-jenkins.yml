@@ -18,5 +18,5 @@ jobs:
         with:
           url: "http://localhost:8080" # Endereço do seu servidor Jenkins local
           job: "exercicio1-ci" # Nome exato do seu Job/Pipeline no Jenkins
-          username: ${{ secrets.JENKINS_USER }} # Configurado em Settings -> Secrets and variables -> Actions
+          user: ${{ secrets.JENKINS_USER }} # Configurado em Settings -> Secrets and variables -> Actions
           token: ${{ secrets.JENKINS_TOKEN }} # Token de API gerado no perfil do usuário no Jenkins
